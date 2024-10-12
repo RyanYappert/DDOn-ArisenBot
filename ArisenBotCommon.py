@@ -45,6 +45,10 @@ def serverGET(server, route, params = {}):
     url = serverRoute(server, route)
     return requests.get(url, params = params, headers = REQUEST_HEADERS)
 
+def serverDELETE(server, route, params = {}):
+    url = serverRoute(server, route)
+    return requests.delete(url, params = params, headers = REQUEST_HEADERS)
+
 def randomServer():
     return random.choice(rpcServers)
 

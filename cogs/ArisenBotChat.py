@@ -67,12 +67,15 @@ class ArisenBotChat(commands.GroupCog, name = "chat"):
             for val in types if current.lower() in val.lower()
         ]
     
-    @app_commands.command(name='name', description = "Set active chat name. Leave blank to check current name.")
+    @app_commands.command(name='name', description = "Set active chat name.")
     @app_commands.checks.has_any_role(*ArisenBotCommon.AUTH_LEVEL_1)
-    async def set_chat_name(self, itx : discord.Interaction, first : str = None, last : str = None):
-        if (first is None) or (last is None):
+    async def set_chat_name(self, itx : discord.Interaction, name : str = None):
+        if name is None:
             await itx.response.send_message(f'Chat name is currently "{self.chatName[0]} {self.chatName[1]}".')
         else:
+            nameSplit = name.split(' ')
+            first = len(nameSplit) > 0 and nameSplit[0] or ""
+            last = len(nameSplit) > 1 and nameSplit[1] or ""
             self.chatName = [first, last]
             await itx.response.send_message(f"Chat name set to {first} {last}.")
 
