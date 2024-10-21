@@ -42,7 +42,7 @@ class ArisenBotServer(commands.GroupCog, name = "server"):
     @app_commands.checks.has_any_role(*ArisenBotCommon.AUTH_LEVEL_1)
     async def server_kick_account(self, itx : discord.Interaction, accountname : str):
         try:
-            findResult = ArisenBotCommon.serverGET(ArisenBotCommon.randomServer(), "info", {"connection" : True, "accountname" : accountname})
+            findResult = ArisenBotCommon.serverGET(ArisenBotCommon.randomServer(), "info", {"connection" : True, "accountname" : accountname.lower()})
         except requests.ConnectionError:
             await itx.response.send_message("❌ The server did not respond. It might be down. ❌", ephemeral=True)
             return
@@ -59,7 +59,7 @@ class ArisenBotServer(commands.GroupCog, name = "server"):
             await itx.response.send_message("ArisenBot does not have knowledge of the required server. Add it with `/addserver`.", ephemeral=True)
             return
         try:
-            kickResult = ArisenBotCommon.serverDELETE(selectedServer, "info", {"accountname" : accountname})
+            kickResult = ArisenBotCommon.serverDELETE(selectedServer, "info", {"accountname" : accountname.lower()})
         except requests.ConnectionError:
             await itx.response.send_message("❌ The server did not respond. It might be down. ❌", ephemeral=True)
             return
@@ -67,7 +67,7 @@ class ArisenBotServer(commands.GroupCog, name = "server"):
         if kickResult.status_code == 200:
             await itx.response.send_message(f"{accountname} has been kicked from the server.")
         else:
-            await itx.response.send_message(f"An ArisenBot error has occured: HTTP CODE {kickResult.status_code}")
+            await itx.response.send_message(f"An ArisenBot error has occured: HTTP CODE {kickResult.status_code} \n `{kickResult.text}`")
 
 async def setup(bot):
     await bot.add_cog(ArisenBotServer(bot), guild = discord.Object(id=ArisenBotCommon.GUILD))

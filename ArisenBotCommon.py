@@ -27,7 +27,7 @@ if (ARISENBOT_SERVER_CSV is not None and len(ARISENBOT_SERVER_CSV) > 0):
         for line in csvFile:
             id = int(line[0])
             name = line[1]
-            addr = line[2]
+            addr = line[2].strip()
             port = int(line[3])
             rpcServers.append([id, name, addr, port])
 

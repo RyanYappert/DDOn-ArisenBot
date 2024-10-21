@@ -12,11 +12,11 @@ class ArisenBotUser(commands.Cog, name = "serverstatus"):
 
     def needRefresh(self):
             currentTime = datetime.datetime.now()
-            return (abs(currentTime - self.serverCacheTime)).total_seconds() / 60.0 >= self.CACHE_TIME
+            return ((abs(currentTime - self.serverCacheTime)).total_seconds() / 60.0) >= self.CACHE_TIME
 
     @app_commands.command(name='status', description="Check server status.")
     @app_commands.checks.has_any_role(*ArisenBotCommon.AUTH_LEVEL_2)
-    @app_commands.checks.cooldown(1, 30.0)
+    @app_commands.checks.cooldown(1, 60.0, key = lambda i: i.channel_id )
     async def server_status(self, itx : discord.Interaction):
         now = datetime.datetime.now()
         if (self.needRefresh()):
@@ -28,14 +28,14 @@ class ArisenBotUser(commands.Cog, name = "serverstatus"):
             
             for status in result.json():
                 self.serverStatusCache[status["Id"]] = status
-            serverCacheTime = now
+            self.serverCacheTime = now
 
         statuslist = [[status[i] for i in ["Name", "LoginNum", "MaxLoginNum"]] for status in self.serverStatusCache.values()]
         s = "```"
         s += tabulate.tabulate(statuslist, headers=["Channel", "Players", "Max"])
         s += "```"
 
-        minutesSinceCache = (now - serverCacheTime).total_seconds() / 60.0
+        minutesSinceCache = (now - self.serverCacheTime).total_seconds() / 60.0
         s += f"Last fetched {int(minutesSinceCache)} minute(s) ago."
         await itx.response.send_message(s)
 
