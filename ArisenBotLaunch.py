@@ -3,7 +3,7 @@ import discord, asyncio, os, logging, logging.handlers
 from discord.ext import commands
 from discord import app_commands
 
-# discord.utils.setup_logging()
+discord.utils.setup_logging()
 
 logger = logging.getLogger('discord')
 logger.setLevel(logging.INFO)
