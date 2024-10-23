@@ -32,7 +32,7 @@ if (ARISENBOT_SERVER_CSV is not None and len(ARISENBOT_SERVER_CSV) > 0):
             rpcServers.append([id, name, addr, port])
 
 def serverPrint(server):
-    return f"{server[1]} ({server[0]}): {serverRoute(server, "")}"
+    return f"{server[1]} ({server[0]}): {serverRoute(server, '')}"
 
 def serverRoute(server, route):
     return f"http://{server[2]}:{server[3]}/rpc/{route}"
